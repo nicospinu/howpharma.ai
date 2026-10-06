@@ -1,6 +1,6 @@
 # HowPharma.AI
 
-A landscape of **open-source AI agents** for drug discovery and development — mapped as a periodic table at [howpharma.ai](https://howpharma.ai).
+A landscape of **open-source AI agents** for drug discovery and development, mapped as a periodic table at [howpharma.ai](https://howpharma.ai).
 
 ## What the map shows
 
