@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>HowPharma.AI - Open-source AI agents</title>
+    <meta
+      name="description"
+      content="Thirty open-source AI agents for drug discovery, indexed as a periodic table. Hover any element to inspect the repository, paper, models, and pipeline stage."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/logo.svg" />
+    <link rel="stylesheet" href="assets/styles.css?v=33" />
+  </head>
+  <body>
+    <div class="lattice" aria-hidden="true"></div>
+    <a class="skip" href="#table">Skip to the table</a>
+
+    <header class="mast">
+      <a class="mast-brand" href="/" aria-label="HowPharma.AI home">
+        <img class="logo" src="assets/logo.svg" width="28" height="28" alt="" />
+        <span>HowPharma.AI</span>
+      </a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Open laboratory</p>
+        <h1>The periodic table of open-source AI agents.</h1>
+        <p class="standfirst">
+          Mapped across drug discovery and development pipeline. Hover a
+          cell to preview. Click to pin.
+        </p>
+        <ul class="stats" aria-label="Catalog snapshot">
+          <li>
+            <strong id="stat-agents">30</strong>
+            <span>Agents</span>
+          </li>
+          <li title="Primary evaluation is experimental, closed-loop, or translational (E5–E7) — the ones that have left the computer.">
+            <strong id="stat-beyond">6</strong>
+            <span>Beyond in silico</span>
+          </li>
+          <li title="Unique laboratories and companies after harmonising university name variants.">
+            <strong id="stat-orgs">61</strong>
+            <span>Organisations</span>
+          </li>
+          <li title="Agents whose organisation type includes a company — Genentech, Roche, AstraZeneca, Bayer, AbbVie, Recursion and others.">
+            <strong id="stat-industry">10</strong>
+            <span>Industry</span>
+          </li>
+        </ul>
+      </section>
+
+      <div class="spectrum" aria-hidden="true">
+        <i class="workflow" style="flex: 7"></i>
+        <i class="knowledge" style="flex: 7"></i>
+        <i class="discovery" style="flex: 7"></i>
+        <i class="loop" style="flex: 6"></i>
+        <i class="hypothesis" style="flex: 3"></i>
+      </div>
+
+      <section class="atlas" aria-label="Agent atlas">
+        <div class="toolbar">
+          <div class="filters" role="group" aria-label="Filter by role">
+            <button class="chip is-on" type="button" data-role="all" data-label="All">
+              All<sup class="chip-n" aria-hidden="true"></sup>
+            </button>
+            <button class="chip" type="button" data-role="workflow" data-label="Workflow">
+              <i class="swatch workflow"></i>Workflow<sup class="chip-n" aria-hidden="true"></sup>
+            </button>
+            <button class="chip" type="button" data-role="knowledge" data-label="Knowledge">
+              <i class="swatch knowledge"></i>Knowledge<sup class="chip-n" aria-hidden="true"></sup>
+            </button>
+            <button class="chip" type="button" data-role="discovery" data-label="Discovery">
+              <i class="swatch discovery"></i>Discovery<sup class="chip-n" aria-hidden="true"></sup>
+            </button>
+            <button class="chip" type="button" data-role="loop" data-label="Closed-loop">
+              <i class="swatch loop"></i>Closed-loop<sup class="chip-n" aria-hidden="true"></sup>
+            </button>
+            <button class="chip" type="button" data-role="hypothesis" data-label="Hypothesis">
+              <i class="swatch hypothesis"></i>Hypothesis<sup class="chip-n" aria-hidden="true"></sup>
+            </button>
+          </div>
+          <label class="find">
+            <span class="sr">Search agents</span>
+            <input id="find" type="search" placeholder="Find an agent, lab, or model" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="stage">
+          <div
+            id="table"
+            class="table"
+            role="listbox"
+            aria-label="Periodic table of agents"
+            aria-activedescendant="a01"
+            tabindex="0"
+          ></div>
+
+          <aside class="inspector" aria-live="polite">
+            <div id="inspect" class="inspect"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="forum" id="opinion" aria-labelledby="opinion-title">
+        <p class="eyebrow">Share your opinion</p>
+        <h2 id="opinion-title">Will a novel drug ever come from an open-source AI agent?</h2>
+        <p class="standfirst">Anonymous. No account. One vote per browser — then tell us why.</p>
+
+        <div class="forum-grid">
+          <div class="ballot">
+            <p class="ballot-kicker">Your vote</p>
+            <div class="ballot-pair" role="group" aria-label="Yes or no">
+              <button class="ballot-btn yes" type="button" data-vote="yes" aria-pressed="false">
+                <span class="ballot-label">Yes</span>
+                <strong class="ballot-count" data-count="yes">0</strong>
+                <span class="ballot-pct" data-pct="yes">—</span>
+              </button>
+              <button class="ballot-btn no" type="button" data-vote="no" aria-pressed="false">
+                <span class="ballot-label">No</span>
+                <strong class="ballot-count" data-count="no">0</strong>
+                <span class="ballot-pct" data-pct="no">—</span>
+              </button>
+            </div>
+            <div class="tally" aria-live="polite">
+              <div class="tally-bar" aria-hidden="true">
+                <i class="yes" id="bar-yes"></i>
+                <i class="no" id="bar-no"></i>
+              </div>
+              <p class="tally-meta" id="tally-meta">No votes yet. Be the first.</p>
+            </div>
+          </div>
+
+          <div class="board">
+            <p class="ballot-kicker">The thread</p>
+            <form class="comment-form" id="comment-form">
+              <label class="sr" for="comment-text">Anonymous comment</label>
+              <textarea
+                id="comment-text"
+                name="comment"
+                maxlength="400"
+                rows="4"
+                placeholder="Leave a comment — why yes, why not, or what would have to be true."
+                required
+              ></textarea>
+              <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+              <div class="comment-actions">
+                <span class="char-count" id="char-count">400</span>
+                <button class="comment-submit" type="submit">Post anonymously</button>
+              </div>
+            </form>
+            <details class="thread-fold" id="thread-fold">
+              <summary class="thread-summary">
+                <span class="thread-caret" aria-hidden="true"></span>
+                <span id="thread-label">No notes yet</span>
+              </summary>
+              <ol class="comments" id="comments" aria-live="polite"></ol>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p class="disclaimer">
+        Open-source AI agents for drug discovery are real and industry-touched,
+        but the map shows a validation gap — plenty of design and tooling,
+        little wet-lab or closed-loop proof, and almost no path yet to a novel
+        drug from an open stack. Data as of October 2026.
+      </p>
+      <div class="site-foot">
+        <p>
+          © 2026 · Project developed and maintained by
+          <a href="https://www.linkedin.com/in/nicoleta-spinu/" target="_blank" rel="noopener noreferrer">Nicoleta Spînu</a>
+        </p>
+        <p>
+          <a class="gh" href="https://github.com/nicospinu/howpharma.ai" target="_blank" rel="noopener noreferrer">
+            Contributions are welcome
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.7 7.7 0 0 1 8 4.77a7.7 7.7 0 0 1 2.1.28c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+              />
+            </svg>
+          </a>
+        </p>
+      </div>
+    </footer>
+
+    <noscript>
+      <p class="noscript">This atlas needs JavaScript to render the thirty agents.</p>
+    </noscript>
+
+    <script src="assets/agents.js?v=6"></script>
+    <script src="assets/app.js?v=30"></script>
+    <script src="assets/opinion.js?v=2"></script>
+  </body>
+</html>
