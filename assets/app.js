@@ -22,6 +22,11 @@
   let activeId = agents[0].id;
   let pinnedId = agents[0].id;
   const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const mobileList = window.matchMedia("(max-width: 720px)");
+
+  function allowHoverPreview() {
+    return canHover.matches && !mobileList.matches;
+  }
 
   const fmt = (n) => n.toLocaleString("en-US");
   const yearShort = (y) => `’${String(y).slice(2)}`;
@@ -344,14 +349,14 @@
   });
 
   table.addEventListener("pointerover", (e) => {
-    if (!canHover.matches) return;
+    if (!allowHoverPreview()) return;
     const btn = e.target.closest(".cell");
     if (!btn || btn.classList.contains("is-dim")) return;
     show(btn.dataset.id);
   });
 
   table.addEventListener("pointerleave", () => {
-    if (!canHover.matches) return;
+    if (!allowHoverPreview()) return;
     show(pinnedId);
   });
 

@@ -1341,7 +1341,80 @@ h1 {
 
 @media (max-width: 720px) {
   .table {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .cell {
+    display: grid;
+    grid-template-columns: 22px 40px minmax(0, 1fr) max-content;
+    align-items: center;
+    column-gap: 10px;
+    aspect-ratio: auto;
+    min-height: 64px;
+    padding: 12px 14px 12px 16px;
+  }
+
+  .cell::before {
+    width: 3px;
+    height: 100%;
+  }
+
+  .cell-print,
+  .cell-bar,
+  .cell-veil {
+    display: none;
+  }
+
+  .cell-top {
+    font-size: 10px;
+  }
+
+  .cell-mark {
+    margin: 0;
+  }
+
+  .cell-symbol {
+    font-size: 22px;
+  }
+
+  .cell-name {
+    min-height: 0;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  .cell-cite {
+    white-space: normal;
+  }
+
+  .cell-meta {
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .cell-meta span {
+    white-space: nowrap;
+  }
+
+  .cell:hover,
+  .cell:focus-visible {
+    transform: none;
+    background: var(--bg-2);
+    border-color: var(--line);
+    z-index: auto;
+  }
+
+  .cell.is-on:hover,
+  .cell.is-on:focus-visible,
+  .cell.is-preview:hover {
+    background: var(--bg-3);
+    border-color: var(--c);
   }
 }
 
@@ -1378,30 +1451,6 @@ h1 {
     margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
-  }
-
-  .table {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .cell {
-    min-height: 0;
-    aspect-ratio: 1 / 1.18;
-    padding: 10px 10px 11px;
-  }
-
-  .cell-mark {
-    margin: 10px 0 6px;
-  }
-
-  .cell-symbol {
-    font-size: clamp(24px, 7vw, 30px);
-  }
-
-  .cell-name {
-    font-size: 12px;
-    min-height: 2.4em;
   }
 
   .inspect {
@@ -1467,25 +1516,25 @@ h1 {
   }
 
   .site-foot {
-    flex-direction: column;
-    align-items: flex-start;
+    display: block;
+    line-height: 1.45;
+  }
+
+  .site-foot p {
+    display: inline;
+    white-space: normal;
+  }
+
+  .site-foot p + p::before {
+    content: " · ";
+  }
+
+  .site-foot .gh {
+    vertical-align: middle;
   }
 }
 
 @media (max-width: 380px) {
-  .table {
-    gap: 6px;
-  }
-
-  .cell {
-    padding: 8px;
-  }
-
-  .cell-print {
-    transform: scale(0.9);
-    transform-origin: right center;
-  }
-
   .chip {
     padding: 0 10px;
     font-size: 10px;
