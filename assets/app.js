@@ -405,4 +405,32 @@
   syncChips();
   paintTable();
   pin(agents[0].id);
+
+  function applyView() {
+    if (location.hash === "#summary" || location.hash === "#atlas") {
+      document.documentElement.dataset.view = location.hash === "#summary" ? "summary" : "atlas";
+    }
+    const view = document.documentElement.dataset.view === "summary" ? "summary" : "atlas";
+    for (const tab of document.querySelectorAll(".view-tab")) {
+      if (tab.dataset.view === view) tab.setAttribute("aria-current", "page");
+      else tab.removeAttribute("aria-current");
+    }
+  }
+
+  function scrollForHash() {
+    const id = location.hash.slice(1);
+    if (!id || id === "summary" || id === "atlas") {
+      window.scrollTo(0, 0);
+      return;
+    }
+    const target = document.getElementById(id);
+    if (target) target.scrollIntoView();
+  }
+
+  applyView();
+  scrollForHash();
+  window.addEventListener("hashchange", () => {
+    applyView();
+    scrollForHash();
+  });
 })();

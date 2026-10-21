@@ -116,6 +116,68 @@ main,
   padding: 22px 28px 0;
 }
 
+.hero-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-bottom: 14px;
+}
+
+.hero-kicker .eyebrow {
+  margin: 0;
+}
+
+.view-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.view-tab {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.view-tab:hover {
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+
+.view-tab:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+html[data-view="atlas"] .view-tab[data-view="atlas"],
+html[data-view="summary"] .view-tab[data-view="summary"] {
+  color: var(--ink);
+  background: var(--accent-dim);
+  border-color: rgba(184, 255, 212, 0.35);
+}
+
+html[data-view="atlas"] .brief {
+  display: none;
+}
+
+html[data-view="summary"] .spectrum,
+html[data-view="summary"] .atlas {
+  display: none;
+}
+
 .mast-brand {
   display: flex;
   align-items: center;
@@ -168,6 +230,17 @@ h1 {
   color: var(--muted);
   font-weight: 400;
   font-size: clamp(16px, 1.6vw, 18px);
+}
+
+.hero .standfirst a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.hero .standfirst a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .stats {
@@ -831,10 +904,70 @@ h1 {
   font-style: italic;
 }
 
+.brief {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 48px 28px 72px;
+  scroll-margin-top: 24px;
+}
+
+.brief h2 {
+  margin: 0;
+  max-width: 16ch;
+  font-weight: 500;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.brief .standfirst {
+  max-width: 46ch;
+}
+
+.brief-list {
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.brief-list li {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 4px 28px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.brief-n {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  padding-top: 6px;
+}
+
+.brief-list h3 {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(20px, 2vw, 24px);
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.brief-list p {
+  margin: 10px 0 0;
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
 .forum {
   max-width: var(--max);
   margin: 0 auto;
   padding: 8px 28px 72px;
+  scroll-margin-top: 24px;
 }
 
 .forum h2 {
@@ -1330,6 +1463,10 @@ h1 {
     display: none;
   }
 
+  html[data-view="summary"] .colophon {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  }
+
   body.is-forum .table {
     padding-bottom: 8px;
   }
@@ -1340,6 +1477,10 @@ h1 {
 }
 
 @media (max-width: 720px) {
+  .view-nav {
+    margin-left: 0;
+  }
+
   .table {
     grid-template-columns: 1fr;
     gap: 6px;
@@ -1416,12 +1557,43 @@ h1 {
     background: var(--bg-3);
     border-color: var(--c);
   }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 28px;
+  }
+
+  .stats li,
+  .stats li:not(:first-child) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 14px 16px 12px 0;
+  }
+
+  .stats li:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+
+  .stats li:nth-child(even) {
+    padding-left: 16px;
+  }
+
+  .stats li:nth-child(n + 3) {
+    border-bottom: 0;
+  }
+
+  .stats li > span {
+    letter-spacing: 0.03em;
+    line-height: 1.35;
+    max-width: 14ch;
+  }
 }
 
 @media (max-width: 640px) {
   .mast,
   .hero,
   .atlas,
+  .brief,
   .forum,
   .colophon,
   .spectrum {
@@ -1468,42 +1640,14 @@ h1 {
     gap: 12px;
   }
 
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
-    margin-top: 28px;
-  }
-
-  .stats li {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-    padding-left: 0;
-  }
-
-  .stats li:nth-child(odd) {
-    padding-right: 14px;
-  }
-
-  .stats li:nth-child(1),
-  .stats li:nth-child(2) {
-    border-right: 1px solid var(--line);
-  }
-
-  .stats li:nth-child(2) {
-    border-right: 0;
-    padding-left: 14px;
-  }
-
-  .stats li:nth-child(3),
-  .stats li:nth-child(4) {
-    border-bottom: 0;
-  }
-
-  .stats li:nth-child(4) {
-    padding-left: 14px;
-  }
-
+  .brief h2,
   .forum h2 {
     max-width: none;
+  }
+
+  .brief-list li {
+    gap: 2px 16px;
+    padding: 22px 0;
   }
 
   .ballot,
