@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
     <title>HowPharma.AI - Open-source AI agents</title>
     <meta
       name="description"
@@ -14,11 +14,24 @@
       href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <base href="/" />
     <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/logo.svg" />
-    <link rel="stylesheet" href="assets/styles.css?v=45" />
+    <link rel="stylesheet" href="assets/styles.css?v=47" />
     <script>
-      document.documentElement.dataset.view = location.hash === "#summary" ? "summary" : "atlas";
+      (function () {
+        if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+        var path = location.pathname.replace(/\/index\.html$/, "");
+        if (path.length > 1 && path.endsWith("/")) path = path.slice(0, -1);
+        if (!path) path = "/";
+        var hash = location.hash;
+        if (hash === "#summary") path = "/summary";
+        else if (hash === "#opinion") path = "/opinion";
+        else if (hash === "#atlas" || hash === "#table") path = "/";
+        var canonical = path === "/summary" || path === "/opinion" ? path : "/";
+        if (location.pathname !== canonical || location.hash) history.replaceState(history.state, "", canonical);
+        document.documentElement.dataset.view = canonical === "/summary" ? "summary" : "atlas";
+      })();
     </script>
   </head>
   <body>
@@ -26,7 +39,7 @@
     <a class="skip" href="#table">Skip to the table</a>
 
     <header class="mast">
-      <a class="mast-brand" href="/" aria-label="HowPharma.AI home">
+      <a class="mast-brand" href="/" data-route aria-label="HowPharma.AI home">
         <img class="logo" src="assets/logo.svg" width="28" height="28" alt="" />
         <span>HowPharma.AI</span>
       </a>
@@ -37,15 +50,16 @@
         <div class="hero-kicker">
           <p class="eyebrow">Open laboratory</p>
           <nav class="view-nav" aria-label="Sections">
-            <a class="view-tab" href="#atlas" data-view="atlas">Agents</a>
-            <a class="view-tab" href="#summary" data-view="summary">Executive summary</a>
+            <a class="view-tab" href="/" data-view="atlas" data-route>Agents</a>
+            <a class="view-tab" href="/summary" data-view="summary" data-route>Executive summary</a>
           </nav>
         </div>
         <h1>The periodic table of open-source AI agents.</h1>
         <p class="standfirst">
-          Mapped across drug discovery and development pipeline. Hover a
-          cell to preview. Click to pin.
-          <a href="#opinion">Share your opinion.</a>
+          Mapped across drug discovery and development pipeline.
+          <span class="hint-pointer">Hover a cell to preview. Click to pin.</span>
+          <span class="hint-touch">Tap a cell for details.</span>
+          <a href="/opinion" data-route>Share your opinion.</a>
         </p>
         <ul class="stats" aria-label="Catalog snapshot">
           <li>
@@ -153,12 +167,14 @@
           <li>
             <span class="brief-n" aria-hidden="true">03</span>
             <div>
-              <h3>Evaluation &amp; validation</h3>
+              <h3>Evaluation asks if a candidate is worth pursuing</h3>
               <p>
-                24 of 30 agents are still evaluated on knowledge, tooling,
-                computational discovery, or expert review. Only 6 show experimental,
-                closed-loop, or translational proof. Design and orchestration are
-                ahead of make/test validation.
+                Agents are still evaluated on knowledge, tooling, computational
+                discovery, or expert review. Ten of the 30 agents are evaluated on
+                whether they generate a useful molecular or biological candidate. One
+                agent has experimental validation as its primary evidence, three run a
+                closed loop, and two reach translational proof. Design and
+                orchestration are ahead of make/test validation.
               </p>
             </div>
           </li>
@@ -280,7 +296,7 @@
     </noscript>
 
     <script src="assets/agents.js?v=6"></script>
-    <script src="assets/app.js?v=35"></script>
+    <script src="assets/app.js?v=38"></script>
     <script src="assets/opinion.js?v=4"></script>
   </body>
 </html>

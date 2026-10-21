@@ -22,10 +22,12 @@
   let activeId = agents[0].id;
   let pinnedId = agents[0].id;
   const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
-  const mobileList = window.matchMedia("(max-width: 720px)");
+  const narrow = window.matchMedia("(max-width: 920px)");
+  let picked = false;
+  let gridScroll = 0;
 
   function allowHoverPreview() {
-    return canHover.matches && !mobileList.matches;
+    return canHover.matches && !narrow.matches;
   }
 
   const fmt = (n) => n.toLocaleString("en-US");
@@ -146,7 +148,7 @@
       const agent = agents.find((a) => a.id === node.dataset.id);
       const id = node.dataset.id;
       node.classList.toggle("is-dim", !visible(agent));
-      node.classList.toggle("is-on", id === pinnedId);
+      node.classList.toggle("is-on", id === pinnedId && (picked || !narrow.matches));
       node.classList.toggle("is-preview", id === activeId && id !== pinnedId);
       node.setAttribute("aria-selected", id === pinnedId ? "true" : "false");
     }
@@ -263,6 +265,7 @@
       : "";
     inspect.style.setProperty("--c", `var(--${agent.role})`);
     inspect.innerHTML = `
+      <button class="inspect-back" type="button" aria-label="Back to all agents">← All agents</button>
       <div class="inspect-mark" aria-hidden="true">${agent.symbol}</div>
       <p class="kicker">${pad(agent.n)} · ${agent.roleLabel} · ${agent.year}</p>
       <h2>${agent.name}</h2>
@@ -303,6 +306,44 @@
       document.getElementById(id)?.scrollIntoView({ block: "nearest" });
     }
   }
+
+  function openDetail(id, push = true) {
+    if (!document.body.classList.contains("is-detail")) gridScroll = window.scrollY;
+    picked = true;
+    pin(id);
+    document.body.classList.add("is-detail");
+    if (push) history.pushState({ agent: id }, "", location.pathname);
+    window.scrollTo(0, 0);
+    inspect.querySelector(".inspect-back")?.focus({ preventScroll: true });
+  }
+
+  function hideDetail() {
+    if (!document.body.classList.contains("is-detail")) return false;
+    document.body.classList.remove("is-detail");
+    window.scrollTo(0, gridScroll);
+    document.getElementById(pinnedId)?.focus({ preventScroll: true });
+    return true;
+  }
+
+  function syncDetail() {
+    const id = history.state?.agent;
+    if (id && narrow.matches && agents.some((a) => a.id === id)) {
+      openDetail(id, false);
+      return true;
+    }
+    return hideDetail();
+  }
+
+  inspect.addEventListener("click", (e) => {
+    if (!e.target.closest(".inspect-back")) return;
+    if (history.state?.agent) history.back();
+    else hideDetail();
+  });
+
+  narrow.addEventListener("change", () => {
+    if (!narrow.matches) hideDetail();
+    syncCells();
+  });
 
   function columns() {
     return getComputedStyle(table).gridTemplateColumns.split(" ").filter(Boolean).length;
@@ -363,7 +404,8 @@
   table.addEventListener("click", (e) => {
     const btn = e.target.closest(".cell");
     if (!btn || btn.classList.contains("is-dim")) return;
-    pin(btn.dataset.id);
+    if (narrow.matches) openDetail(btn.dataset.id);
+    else pin(btn.dataset.id);
   });
 
   table.addEventListener("keydown", (e) => {
@@ -389,7 +431,8 @@
       if (shown.length) pin(shown[shown.length - 1].id, true);
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      pin(activeId);
+      if (narrow.matches) openDetail(activeId);
+      else pin(activeId);
     }
   });
 
@@ -406,31 +449,83 @@
   paintTable();
   pin(agents[0].id);
 
-  function applyView() {
-    if (location.hash === "#summary" || location.hash === "#atlas") {
-      document.documentElement.dataset.view = location.hash === "#summary" ? "summary" : "atlas";
-    }
+  function currentPath(pathname = location.pathname) {
+    let path = pathname.replace(/\/index\.html$/, "");
+    if (path.length > 1 && path.endsWith("/")) path = path.slice(0, -1);
+    return path || "/";
+  }
+
+  function canonicalPath(pathname = location.pathname) {
+    if (location.hash === "#summary") return "/summary";
+    if (location.hash === "#opinion") return "/opinion";
+    if (location.hash === "#atlas" || location.hash === "#table") return "/";
+    const path = currentPath(pathname);
+    if (path === "/summary" || path === "/opinion") return path;
+    return "/";
+  }
+
+  function sectionFor(path) {
+    if (path === "/summary") return "summary";
+    if (path === "/opinion") return "opinion";
+    return "atlas";
+  }
+
+  function markSection(path) {
+    const section = sectionFor(path);
+    if (section !== "opinion") document.documentElement.dataset.view = section;
+    else if (!document.documentElement.dataset.view) document.documentElement.dataset.view = "atlas";
     const view = document.documentElement.dataset.view === "summary" ? "summary" : "atlas";
     for (const tab of document.querySelectorAll(".view-tab")) {
       if (tab.dataset.view === view) tab.setAttribute("aria-current", "page");
       else tab.removeAttribute("aria-current");
     }
+    return section;
   }
 
-  function scrollForHash() {
-    const id = location.hash.slice(1);
-    if (!id || id === "summary" || id === "atlas") {
-      window.scrollTo(0, 0);
+  function applyRoute(path) {
+    document.body.classList.remove("is-detail");
+    const section = markSection(path);
+    if (section === "opinion") document.getElementById("opinion")?.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }
+
+  function navigate(path) {
+    const next = path === "/summary" || path === "/opinion" ? path : "/";
+    if (currentPath() !== next || location.hash) history.pushState(null, "", next);
+    applyRoute(next);
+  }
+
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest("a[data-route]");
+    if (!link || e.defaultPrevented || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const url = new URL(link.href, location.origin);
+    if (url.origin !== location.origin) return;
+    e.preventDefault();
+    navigate(currentPath(url.pathname));
+  });
+
+  document.querySelector(".skip")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (location.hash) history.replaceState(history.state, "", canonicalPath());
+    table.focus();
+    table.scrollIntoView();
+  });
+
+  function showRoute() {
+    const next = canonicalPath();
+    if (location.pathname !== next || location.hash) history.replaceState(history.state, "", next);
+    if (syncDetail()) {
+      markSection(next);
       return;
     }
-    const target = document.getElementById(id);
-    if (target) target.scrollIntoView();
+    applyRoute(next);
   }
 
-  applyView();
-  scrollForHash();
-  window.addEventListener("hashchange", () => {
-    applyView();
-    scrollForHash();
+  showRoute();
+  window.addEventListener("popstate", showRoute);
+  window.addEventListener("hashchange", showRoute);
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) showRoute();
   });
 })();
