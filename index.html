@@ -16,7 +16,10 @@
     />
     <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/logo.svg" />
-    <link rel="stylesheet" href="assets/styles.css?v=38" />
+    <link rel="stylesheet" href="assets/styles.css?v=45" />
+    <script>
+      document.documentElement.dataset.view = location.hash === "#summary" ? "summary" : "atlas";
+    </script>
   </head>
   <body>
     <div class="lattice" aria-hidden="true"></div>
@@ -30,12 +33,19 @@
     </header>
 
     <main>
-      <section class="hero">
-        <p class="eyebrow">Open laboratory</p>
+      <section class="hero" id="atlas">
+        <div class="hero-kicker">
+          <p class="eyebrow">Open laboratory</p>
+          <nav class="view-nav" aria-label="Sections">
+            <a class="view-tab" href="#atlas" data-view="atlas">Agents</a>
+            <a class="view-tab" href="#summary" data-view="summary">Executive summary</a>
+          </nav>
+        </div>
         <h1>The periodic table of open-source AI agents.</h1>
         <p class="standfirst">
           Mapped across drug discovery and development pipeline. Hover a
           cell to preview. Click to pin.
+          <a href="#opinion">Share your opinion.</a>
         </p>
         <ul class="stats" aria-label="Catalog snapshot">
           <li>
@@ -107,6 +117,77 @@
             <div id="inspect" class="inspect"></div>
           </aside>
         </div>
+      </section>
+
+      <section class="brief" id="summary" aria-labelledby="summary-title">
+        <p class="eyebrow">Executive summary</p>
+        <h2 id="summary-title">What the thirty agents mean for R&amp;D</h2>
+        <p class="standfirst">
+          Industry is already in the open stack, and the evidence is still early.
+          Five findings for decisions on partnership, validation, and where the
+          next experiment should sit.
+        </p>
+        <ol class="brief-list">
+          <li>
+            <span class="brief-n" aria-hidden="true">01</span>
+            <div>
+              <h3>Industry is actively entering the open space</h3>
+              <p>
+                About one-third of the 30 agents include industry-affiliated
+                authors, such as Genentech, Roche, AstraZeneca, Bayer, AbbVie,
+                and Recursion.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="brief-n" aria-hidden="true">02</span>
+            <div>
+              <h3>Most agents are in early discovery</h3>
+              <p>
+                Most activity focuses on hit identification, lead optimisation, and
+                preclinical design. Integration with synthesis, automated laboratory
+                testing, and clinical development remains limited.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="brief-n" aria-hidden="true">03</span>
+            <div>
+              <h3>Evaluation &amp; validation</h3>
+              <p>
+                24 of 30 agents are still evaluated on knowledge, tooling,
+                computational discovery, or expert review. Only 6 show experimental,
+                closed-loop, or translational proof. Design and orchestration are
+                ahead of make/test validation.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="brief-n" aria-hidden="true">04</span>
+            <div>
+              <h3>The reality today is prompt-to-task, not prompt-to-drug</h3>
+              <p>
+                Agents can help execute parts of the discovery process, but they do
+                not yet deliver an end-to-end drug development capability. The
+                strategic question is whether they can move beyond productivity
+                gains to demonstrable improvements in discovery speed, success
+                rates, and cost.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="brief-n" aria-hidden="true">05</span>
+            <div>
+              <h3>Focus on closing the loop</h3>
+              <p>
+                The biggest opportunity is to connect AI agents to real experiments
+                and measurable outcomes. Prioritise solutions that integrate
+                laboratory automation, assay feedback, and prospective testing over
+                those that simply add a conversational interface to existing tools.
+              </p>
+            </div>
+          </li>
+        </ol>
       </section>
 
       <section class="forum" id="opinion" aria-labelledby="opinion-title">
@@ -199,7 +280,7 @@
     </noscript>
 
     <script src="assets/agents.js?v=6"></script>
-    <script src="assets/app.js?v=31"></script>
-    <script src="assets/opinion.js?v=2"></script>
+    <script src="assets/app.js?v=35"></script>
+    <script src="assets/opinion.js?v=4"></script>
   </body>
 </html>
